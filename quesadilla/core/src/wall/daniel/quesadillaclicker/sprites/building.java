@@ -6,8 +6,9 @@ public class building {
 
 	public float x, y;
 	float qps;	// Quesadillas per second
-	int quantity = 0;
+	public int quantity = 0;
 	int cost;
+	public String name;
 	
 	private Texture img;
 	
@@ -17,6 +18,7 @@ public class building {
 		this.y = y;
 		this.qps = qps;
 		this.cost = cost;
+		name = imgPath.substring(0, imgPath.length() - 4);
 		
 		img = new Texture(imgPath);
 	}
@@ -28,7 +30,7 @@ public class building {
 	public float getQuesadillas() {
 		return quantity * qps;
 	}
-	public int getBuildingAmount() {
+	public int getQuantity() {
 		return quantity;
 	}
 	public int getCost() {

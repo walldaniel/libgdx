@@ -9,22 +9,22 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import wall.daniel.quesadillaclicker.QuesadillaClicker;
+import wall.daniel.quesadillaclicker.backend.fileUtils;
 import wall.daniel.quesadillaclicker.sprites.building;
 
 public class PlayState extends State {
 
 	Texture cookie;
 	BitmapFont font;
-
+	DecimalFormat df = new DecimalFormat("0.0");
+	ArrayList<building> buildings = new ArrayList<building>();
+	
 	float xCookie = 32f;
 	float yCookie = 256f;
 	float xBuildings = QuesadillaClicker.WIDTH - 128;
 
 	float cookies = 0;
-	
-	DecimalFormat df = new DecimalFormat("0.0");
-
-	ArrayList<building> buildings = new ArrayList<building>();
+	float timeLastSave = 0;
 
 	public PlayState(GameStateManager gsm) {
 		super(gsm);
@@ -35,9 +35,10 @@ public class PlayState extends State {
 
 		// import buildings
 		buildings.add(new building(xBuildings, 32, "cursor.png", 0.5f, 10));
-		buildings.add(new building(xBuildings,
-				buildings.get(buildings.size() - 1).y + buildings.get(buildings.size() - 1).getImgHeight() + 16,
-				"mexican.png", 3, 100));
+		buildings.add(new building(xBuildings, buildings.get(buildings.size() - 1).y +
+				buildings.get(buildings.size() - 1).getImgHeight() + 16, "mexican.png", 3, 100));
+		
+		buildings = fileUtils.readFile(buildings);
 	}
 
 	@Override
@@ -74,6 +75,13 @@ public class PlayState extends State {
 			cookies += b.getQuesadillas() * dt;
 		}
 
+		
+		// Save file stuff, save every 60 seconds
+		timeLastSave += dt;
+		if(timeLastSave > 2) {
+			timeLastSave = 0;	
+			fileUtils.saveFile(buildings, cookies);
+		}
 	}
 
 	@Override
@@ -87,7 +95,7 @@ public class PlayState extends State {
 			sb.draw(b.getImg(), b.x, b.y);
 
 			// draw how many of each building right beside
-			font.draw(sb, Integer.toString(b.getBuildingAmount()), b.x + 8 + b.getImgWidth(), b.y);
+			font.draw(sb, Integer.toString(b.getQuantity()), b.x + 8 + b.getImgWidth(), b.y);
 		}
 		// font.draw(sb, "x: " + Float.toString(Gdx.input.getX()), 10, 10);
 		// font.draw(sb, "y: " + Float.toString(Gdx.input.getY()), 10, 30);
