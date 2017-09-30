@@ -23,7 +23,7 @@ public class PlayState extends State {
 	float yCookie = 256f;
 	float xBuildings = QuesadillaClicker.WIDTH - 128;
 
-	float cookies = 0;
+	double cookies = 0;
 	float timeLastSave = 0;
 
 	public PlayState(GameStateManager gsm) {
@@ -38,7 +38,8 @@ public class PlayState extends State {
 		buildings.add(new building(xBuildings, buildings.get(buildings.size() - 1).y +
 				buildings.get(buildings.size() - 1).getImgHeight() + 16, "mexican.png", 3, 100));
 		
-		buildings = fileUtils.readFile(buildings);
+		buildings = fileUtils.readBuildings(buildings);
+		cookies = fileUtils.readCookies();
 	}
 
 	@Override
