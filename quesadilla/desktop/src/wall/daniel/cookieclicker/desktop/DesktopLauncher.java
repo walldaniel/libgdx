@@ -10,6 +10,7 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.height = QuesadillaClicker.HEIGHT;
 		config.width = QuesadillaClicker.WIDTH;
+		config.foregroundFPS = 60;
 		new LwjglApplication(new QuesadillaClicker(), config);
 	}
 }
