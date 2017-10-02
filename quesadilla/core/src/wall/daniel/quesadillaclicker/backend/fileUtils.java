@@ -42,12 +42,9 @@ public class fileUtils {
 			FileWriter file = new FileWriter(FILENAME);
 			file.write(jsonArr.toJSONString());
 			file.close();
-			System.out.println("success");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		System.out.println("doine?");
 	}
 
 	public static ArrayList<building> readBuildings(ArrayList<building> buildings) {

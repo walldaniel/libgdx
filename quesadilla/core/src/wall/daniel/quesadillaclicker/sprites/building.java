@@ -7,7 +7,7 @@ public class building {
 	public float x, y;
 	float qps;	// Quesadillas per second
 	public int quantity = 0;
-	int cost;
+	private int cost;
 	public String name;
 	
 	private Texture img;
@@ -34,7 +34,7 @@ public class building {
 		return quantity;
 	}
 	public int getCost() {
-		return cost;
+		return (int) (cost * Math.pow(1.1, quantity));
 	}
 	
 	

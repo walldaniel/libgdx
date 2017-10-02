@@ -1,6 +1,5 @@
 package wall.daniel.quesadillaclicker.states;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
@@ -16,7 +15,6 @@ public class PlayState extends State {
 
 	Texture cookie;
 	BitmapFont font;
-	DecimalFormat df = new DecimalFormat("0.0");
 	ArrayList<building> buildings = new ArrayList<building>();
 	
 	float xCookie = 32f;
@@ -34,9 +32,11 @@ public class PlayState extends State {
 		font = new BitmapFont();
 
 		// import buildings
-		buildings.add(new building(xBuildings, 32, "cursor.png", 0.5f, 10));
+		buildings.add(new building(xBuildings, 32, "cursor.png", 0.2f, 10));
 		buildings.add(new building(xBuildings, buildings.get(buildings.size() - 1).y +
-				buildings.get(buildings.size() - 1).getImgHeight() + 16, "mexican.png", 3, 100));
+				buildings.get(buildings.size() - 1).getImgHeight() + 16, "mexican.png", 3, 300));
+		buildings.add(new building(xBuildings, buildings.get(buildings.size() - 1).y +
+				buildings.get(buildings.size() - 1).getImgHeight() + 16, "cow.png", 5, 1000));
 		
 		buildings = fileUtils.readBuildings(buildings);
 		cookies = fileUtils.readCookies();
@@ -58,8 +58,8 @@ public class PlayState extends State {
 							&& Gdx.input.getY() > QuesadillaClicker.HEIGHT - b.y - b.getImgHeight()) {
 						// Check if enough cookies to buy
 						if (cookies > b.getCost()) {
-							b.increaseAmount();
 							cookies -= b.getCost();
+							b.increaseAmount();
 						}
 					}
 				}
@@ -79,7 +79,7 @@ public class PlayState extends State {
 		
 		// Save file stuff, save every 60 seconds
 		timeLastSave += dt;
-		if(timeLastSave > 2) {
+		if(timeLastSave > 10) {
 			timeLastSave = 0;	
 			fileUtils.saveFile(buildings, cookies);
 		}
@@ -89,14 +89,15 @@ public class PlayState extends State {
 	public void render(SpriteBatch sb) {
 		sb.begin();
 		sb.draw(cookie, xCookie, yCookie);
-		font.draw(sb, df.format(cookies), 50, 50);
+		font.draw(sb, Integer.toString((int) cookies), 50, 50);
 
 		// Draw all of the buildings
 		for (building b : buildings) {
 			sb.draw(b.getImg(), b.x, b.y);
 
 			// draw how many of each building right beside
-			font.draw(sb, Integer.toString(b.getQuantity()), b.x + 8 + b.getImgWidth(), b.y);
+			font.draw(sb, Integer.toString(b.getQuantity()), b.x + 8 + b.getImgWidth(), b.y + b.getImgHeight());
+			font.draw(sb, "$" + b.getCost() + ", " + b.name, b.x,b.y);
 		}
 		// font.draw(sb, "x: " + Float.toString(Gdx.input.getX()), 10, 10);
 		// font.draw(sb, "y: " + Float.toString(Gdx.input.getY()), 10, 30);
